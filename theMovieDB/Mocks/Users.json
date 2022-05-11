@@ -1,0 +1,23 @@
+{
+    "users" : [
+        {
+            "id" : "9347",
+            "user" : "Carlos Monzalvo",
+            "email" : "carlos@gmail.com",
+            "password" : "c4r1o5"
+        },
+        {
+            "id" : "7845",
+            "user" : "Prueba Coppel",
+            "email" : "grupo-coppel@gmail.com",
+            "password" : "grupocoppel_123"
+        },
+        {
+            "id" : "2348",
+            "user" : "123",
+            "email" : "123@gmail.com",
+            "password" : "123"
+        }
+    ]
+}
+ 
