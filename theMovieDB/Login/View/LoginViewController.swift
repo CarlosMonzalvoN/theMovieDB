@@ -14,7 +14,6 @@ class LoginViewController: UIViewController{
         let button = UIButton(type: .system)
         button.backgroundColor = .systemBlue
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Log in", for: .normal)
         button.layer.cornerRadius = 4
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.textAlignment = .center
@@ -25,7 +24,6 @@ class LoginViewController: UIViewController{
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.layer.cornerRadius = 4
-        textField.placeholder = "Please enter username"
         textField.backgroundColor = .white
         return textField
     }()
@@ -34,7 +32,6 @@ class LoginViewController: UIViewController{
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.layer.cornerRadius = 4
         textField.backgroundColor = .white
-        textField.placeholder = "Please enter password"
         return textField
     }()
     let warringLabel: UILabel = {
@@ -47,10 +44,28 @@ class LoginViewController: UIViewController{
         return label
     }()
     
+    let logoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleToFill
+        return imageView
+    }()
+    
+    private func configure(model: LoginViewModel){
+        userTextField.placeholder = model.userLabelPlaceholder
+        passwordTextField.placeholder =  model.passwordLabelPlaceholder
+        logoImageView.image = UIImage(named: model.logoImage)
+        buttonLog.setTitle(model.buttonLoginText, for: .normal)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .gray
+        
+        let config: LoginViewModel = LoginViewConfig()
+        configure(model: config)
+        
+        view.backgroundColor = .black
+        view.addSubview(logoImageView)
         view.addSubview(buttonLog)
         view.addSubview(userTextField)
         view.addSubview(passwordTextField)
@@ -63,8 +78,12 @@ class LoginViewController: UIViewController{
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let constraints =  [
-            userTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 400),
+        NSLayoutConstraint.activate([
+            logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 260),
+            logoImageView.widthAnchor.constraint(equalToConstant: 140),
+            logoImageView.heightAnchor.constraint(equalToConstant: 140),
+            userTextField.topAnchor.constraint(equalTo: logoImageView.topAnchor, constant: 180),
             userTextField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
             userTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
             userTextField.heightAnchor.constraint(equalToConstant: 40),
@@ -81,8 +100,7 @@ class LoginViewController: UIViewController{
             warringLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
             warringLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
             warringLabel.heightAnchor.constraint(equalToConstant: 20)
-        ]
-        NSLayoutConstraint.activate(constraints)
+        ])
     }
     
     @objc func buttonLoggin(){
@@ -102,5 +120,11 @@ class LoginViewController: UIViewController{
     }
 }
 
-
+struct LoginViewConfig: LoginViewModel {
+    var userLabelPlaceholder: String = "Enter Username"
+    var passwordLabelPlaceholder: String = "Enter Password"
+    var buttonLoginText: String = "Log in"
+    var logoImage: String = "db_logo"
+    
+}
 
