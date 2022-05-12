@@ -18,7 +18,7 @@ class HomeViewController: UIViewController {
         view.backgroundColor = .white
         configureCollectionView()
         configure()
-        
+        navigationController?.navigationBar.barStyle = .black
     }
     
     private func configure() {
@@ -44,7 +44,8 @@ class HomeViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            collectionView.rightAnchor.constraint(equalTo: view.rightAnchor)
+            collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            
         ])
     }
     
