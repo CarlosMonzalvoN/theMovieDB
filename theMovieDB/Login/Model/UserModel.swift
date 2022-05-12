@@ -11,11 +11,12 @@ import Foundation
 struct UserModel : Decodable{
     let users : [Users]?
     
-    struct Users : Decodable{
-        let id : String
-        let user : String
-        let email : String
-        let password : String
-    }
+    
 }
 
+struct Users : Decodable{
+    let id : String
+    let user : String
+    let email : String
+    let password : String
+}

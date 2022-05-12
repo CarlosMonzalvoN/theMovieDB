@@ -112,12 +112,8 @@ class LoginViewController: UIViewController{
                    $0.user == userTextField.text!}).first else{ warringLabel.text = "Invalid username or password"
                    return
                }
-        let keychain: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: getUser.user,
-            kSecValueData as String: getUser.password
-        ]
-        SecItemAdd(keychain as CFDictionary, nil)
+        
+        UserManager.shared.setUser(user: getUser)
         
         let mainView: UIViewController = HomeViewController()
         let navController = UINavigationController(rootViewController: mainView)

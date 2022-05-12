@@ -16,14 +16,25 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         model = HomeViewConfiguration(with: self)
         view.backgroundColor = .white
+        configureNavigationBar()
         configureCollectionView()
         configure()
-        navigationController?.navigationBar.barStyle = .black
     }
     
     private func configure() {
         title = model?.title
         model?.getData()
+    }
+    
+    private func configureNavigationBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
+        navigationController?.navigationBar.barStyle = .black
+    }
+    
+    @objc func addTapped(){
+        let controller: UIViewController = UserProfileViewController()
+        modalPresentationStyle = .popover
+        present(controller, animated: true, completion: nil)
     }
     
     private func configureCollectionView() {
