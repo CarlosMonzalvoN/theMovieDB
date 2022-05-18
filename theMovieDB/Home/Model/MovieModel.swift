@@ -26,7 +26,7 @@ struct Movie: Codable {
 
 extension Movie: MovieViewModel {
     var posterUrl: String {
-        MovieAppManager.shared.moviePosterFullPath(forMovie: poster_path ?? "") ?? ""
+        poster_path ?? ""
     }
     
     var titleText: String {

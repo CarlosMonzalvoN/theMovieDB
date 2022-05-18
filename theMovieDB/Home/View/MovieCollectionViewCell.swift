@@ -41,7 +41,7 @@ class MovieCollectionViewCell: UICollectionViewCell {
     }()
     
     func configure(model: MovieViewModel) {
-        backgroundImageView.loadFrom(URLAddress: model.posterUrl)
+        backgroundImageView.loadFrom(URLAddress: model.posterUrl, usingbaseurl: true, size: .thumbnail)
         titleMovieLabel.text = model.titleText
         overviewMovieLabel.text = model.overviewText
     }

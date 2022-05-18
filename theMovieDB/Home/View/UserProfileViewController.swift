@@ -12,17 +12,17 @@ class UserProfileViewController: UIViewController {
     let userName: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
+        label.font = UIFont.boldSystemFont(ofSize: 14.0)
+        label.textColor = .white
         return label
     }()
-    
     let email: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
+        label.font = UIFont.boldSystemFont(ofSize: 14.0)
+        label.textColor = .white
         return label
     }()
-    
     let userImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -31,13 +31,29 @@ class UserProfileViewController: UIViewController {
         return image
     }()
     
+    let exitButton: UIButton = UIButton(type: .system)
+    private var blurEffectView: UIVisualEffectView?
+    private var navigation: UINavigationController?
+    
+    init(with navigation: UINavigationController) {
+        super.init(nibName: nil, bundle: nil)
+        self.navigation =  navigation
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        addBackground()
         let config: UserViewModel = UserViewConfig()
-        view.backgroundColor = .white
-        view.addSubview(userName)
-        view.addSubview(email)
-        view.addSubview(userImage)
+        view.backgroundColor = .clear
+        view.addSubviewIfAble(userName)
+        view.addSubviewIfAble(email)
+        view.addSubviewIfAble(userImage)
+        view.addSubviewIfAble(exitButton)
+        configureButton()
         configure(model: config)
         configureConstraints()
     }
@@ -48,23 +64,47 @@ class UserProfileViewController: UIViewController {
         userImage.image = UIImage(named: model.userImage)
     }
     
+    func configureButton() {
+        exitButton.setTitleColor(.white, for: .normal)
+        exitButton.setTitle("Log Out", for: .normal)
+        exitButton.backgroundColor = .red
+        exitButton.translatesAutoresizingMaskIntoConstraints = false
+        exitButton.addTarget(self, action: #selector(logOut), for: .touchUpInside)
+    }
+    
+    @objc func logOut(){
+        self.dismiss(animated: true) { [weak self] in
+            self?.navigation?.dismiss(animated: true)
+        }
+    }
+    
     func configureConstraints() {
         NSLayoutConstraint.activate([
+            userImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             userImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
             userImage.widthAnchor.constraint(equalToConstant: 160),
             userImage.heightAnchor.constraint(equalToConstant: 160),
-            userImage.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
+            userName.topAnchor.constraint(equalTo: userImage.bottomAnchor, constant: 16),
             userName.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
             userName.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 16),
-            userName.topAnchor.constraint(equalTo: userImage.bottomAnchor, constant: 10),
-            userName.heightAnchor.constraint(equalToConstant: 50),
-            userName.widthAnchor.constraint(equalToConstant: 70),
+            email.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 5),
             email.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
             email.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 16),
-            email.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 10),
-            email.heightAnchor.constraint(equalToConstant: 50),
-            email.widthAnchor.constraint(equalToConstant: 70)
+            exitButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
+            exitButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
+            exitButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
+            exitButton.heightAnchor.constraint(equalToConstant: 50),
+            exitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
+    }
+    
+    func addBackground() {
+        self.view.backgroundColor = .clear
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView?.frame = view.bounds
+        blurEffectView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubviewIfAble(blurEffectView)
     }
 }
 

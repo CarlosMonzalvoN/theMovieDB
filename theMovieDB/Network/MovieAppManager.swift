@@ -12,7 +12,7 @@ class MovieAppManager{
     private let key = "5aa9f9d04ab72a31b70f56ef9db4b81e"
     private let lang = "en-US"
     private let baseUrl = "https://api.themoviedb.org/3"
-    private let imageBaseUrl = "https://image.tmdb.org/t/p/"
+    fileprivate let imageBaseUrl = "https://image.tmdb.org/t/p/"
     
     lazy var jsonDecoder = JSONDecoder()
     
@@ -20,17 +20,22 @@ class MovieAppManager{
     
     enum MovieErrors: String {
         case mapError = "The Json not match with Moviemodel"
-        case empyError = "The data is empty"
+        case emptyError = "The data is empty"
     }
     
-    func getMovieList(finished: @escaping (MovieModel?, MovieErrors?) -> ()){
+    enum DetailMovieErrors: String {
+        case mapError = "The Json not match with Moviemodel"
+        case emptyError = "The data is empty"
+    }
+    
+    func getMovieList(finished: @escaping (MovieModel?, MovieErrors?) -> ()) {
         let endpoint = "/movie/popular?"
         let params = "api_key=\(self.key)&language=\(self.lang)"
         guard let url = URL(string: baseUrl + endpoint + params) else { return }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let json = data else {
-                finished(nil, MovieErrors.empyError)
+                finished(nil, MovieErrors.emptyError)
                 return
             }
             let decoder = JSONDecoder()
@@ -43,9 +48,31 @@ class MovieAppManager{
         }.resume()
     }
     
-    func moviePosterFullPath(forMovie moviePath: String) -> String?  {
-        guard !moviePath.isEmpty else { return nil }
-            let size: String = "w200"
-            return imageBaseUrl + size + moviePath
-        }
+    func getMovieDetail(movie id: Int, finished: @escaping (DetailModel?, DetailMovieErrors?) -> ()) {
+        let endpoint = "/movie"
+        let idmovie = "/\(id)?"
+        let params = "api_key=\(self.key)&language=\(self.lang)"
+        guard let url = URL(string: baseUrl + endpoint + idmovie + params) else { return }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let json = data else {
+                finished(nil, DetailMovieErrors.emptyError)
+                return
+            }
+            let decoder = JSONDecoder()
+            let detailMovieData: DetailModel? = try? decoder.decode(DetailModel.self, from: json)
+            guard let detailsMovie =  detailMovieData else {
+                finished(nil, DetailMovieErrors.mapError)
+                return
+            }
+            finished(detailsMovie, nil)
+        }.resume()
+    }
+    
+}
+
+extension UIImageView {
+    var baseUrl: String {
+        MovieAppManager.shared.imageBaseUrl
+    }
 }

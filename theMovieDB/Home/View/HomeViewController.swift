@@ -32,7 +32,8 @@ class HomeViewController: UIViewController {
     }
     
     @objc func addTapped(){
-        let controller: UIViewController = UserProfileViewController()
+        guard let navigation = self.navigationController else {  return }
+        let controller: UIViewController = UserProfileViewController(with: navigation)
         modalPresentationStyle = .popover
         present(controller, animated: true, completion: nil)
     }
@@ -92,6 +93,14 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout{
 extension HomeViewController: UICollectionViewDelegate {
  
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-       print("User tapped on item \(indexPath.row)")
+        guard let movie = model?.getMovie(for: indexPath.item),
+              let movieid = movie.id else {
+            return
+        }
+        let configuration: DetailsViewModel = DetailMovieCofiguration(id: movieid)
+        let controller: UIViewController = MovieDetailViewController.init(withModel: configuration)
+        modalPresentationStyle = .popover
+        present(controller, animated: true, completion: nil)
+        
     }
 }
