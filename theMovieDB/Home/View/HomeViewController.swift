@@ -75,12 +75,11 @@ extension HomeViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "movieCell", for: indexPath) as? UICollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "movieCell", for: indexPath) as? MovieCollectionViewCell else {
             return UICollectionViewCell()
         }
-        if let currentCell = cell as? MovieCollectionViewCell,
-           let movie = model?.getMovie(for: indexPath.item) as? MovieViewModel {
-            currentCell.configure(model: movie)
+        if let movie = model?.getMovie(for: indexPath.item) as? MovieViewModel {
+            cell.configure(model: movie)
         }
         return cell
     }
